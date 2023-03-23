@@ -128,11 +128,11 @@ for bit in range(200):
 > Заметив инструкцию INT (`CD 15`) в дизассемблере (отвечает за сон [прерывание]), подменим биты через редактор HEX на пустую инструкцию (`17 01`) и запустим файл через `dosbox`
 > 
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled.png)
+![Untitled](images/Untitled.png)
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%201.png)
+![Untitled](images/Untitled%201.png)
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%202.png)
+![Untitled](images/Untitled%202.png)
 
 
 🏁 Flag: `nto{h3ll0_n3w_5ch00l_fr0m_0ld!!}`
@@ -153,13 +153,13 @@ for bit in range(200):
 
 Пользователем был скачан зараженный файл `minecraft.jar`, который он (либо человек с физическим доступом к машине, например, его сын), судя по `.bash_history`, запустил (строка `java -jar minecraft.jar`). В файле был найден вредоносный код, открывающий реверс-шелл на IP `192.168.126.129`, порт `4444` от лица пользователя `sergey` дающий доступ к исполняемому файлу `/usr/bin/bash`, который дал злоумышленнику доступ к выполнению команд от лица пользователя, а также “входное окно” для дальнейшей эскалации и атак.
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%203.png)
+![Untitled](images/Untitled%203.png)
 
 ### Как повысил свои права?
 
 В первую очередь атакующий запустил программу сканирования уязвимостей `linpeas` (файл `/home/sergey/Downloads/linpeas.sh`). По `.bash_history` можно понять, что на файле `/usr/bin/find` стоял бит SUID, который позволяет с легкостью эскалировать привелегии (`find something -exec /bin/bash`, например). Вероятнее всего, вектор атаки проходил именно через этот файл.
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%204.png)
+![Untitled](images/Untitled%204.png)
 
 ### Как злоумышленник узнал пароль от `passwords.kdbx`?
 
@@ -167,7 +167,7 @@ for bit in range(200):
 
 При анализе ранее найденного файла `/var/log/logkeys.log` было обнаружено, что в нем содержится пароль от KeePass2 базы данных. `cat ~/.recent_files` показывает, что единственный файл, с которым пользователь взаимодействовал недавно - `/home/sergey/passwords.kdbx`. Переписав пароль из формата хранения кей-логгера в привычный (`1_D0N7_N0W_WHY_N07_M4Y83_345Y`), мы убедились в том, что он подходит к базе данных (`keepass /home/sergey/passwords.kdbx` → Ввели пароль, тем самым расшифровав базу данных). По такому же пути этот пароль узнал и злоумышленник — через файл журналов кей-логгера.
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%205.png)
+![Untitled](images/Untitled%205.png)
 
 ### Куда `logkeys` пишет логи ?
 
@@ -179,13 +179,13 @@ for bit in range(200):
 
 Запускаем файл `logkeys`, видим справку со ссылкой на репозиторий и версию (0.2.0). Зайдя по этому тегу на github видим, что при запуске без аргумента -o (как в нашем случае), стандартный путь для записи логов - `/var/log/logkeys.log`
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%206.png)
+![Untitled](images/Untitled%206.png)
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%207.png)
+![Untitled](images/Untitled%207.png)
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%208.png)
+![Untitled](images/Untitled%208.png)
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%209.png)
+![Untitled](images/Untitled%209.png)
 
 ### Пароль от чего лежит в `passwords.kdbx`?
 
@@ -193,7 +193,7 @@ for bit in range(200):
 
 Открыв файл `/home/sergey/passwords.kdbx` при помощи команды `keepass2 /home/sergey/passwords.kdbx` и введя ранее найденный пароль, мы выяснили, что база данных содержит ключ от `windows_rdp`: `Administrator` / `SecretP@ss0rdMayby_0rNot&`. Это пароль для подключения к *какой-то* машине, работающей на Windows, через удаленный рабочий стол (Remote Desktop Protocol).
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2010.png)
+![Untitled](images/Untitled%2010.png)
 
 ### 🔍 Приложение: Криптор
 
@@ -202,7 +202,7 @@ for bit in range(200):
 - Файлы зашифровались
 - На рабочем столе появился бы файл `info.txt` со следующим содержимым: `Sad to say, but all your files have been encrypted!\n\nBut don't cry, there's the way to recover them - pay 500$ in BTC to this wallet:\n3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy\n\nYou have 24 hours. After them your files will stay unaccessible for next eternity.`
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2011.png)
+![Untitled](images/Untitled%2011.png)
 
 ```python
 from base64 import b64decode
@@ -229,21 +229,21 @@ print(decode(Message))
 
 После расшифровки файлов из директории `C:\Users\Administrator\AppData\Local\Google\Chrome\User Data\Default` при помощи ранее написанной программы, заменив файлы на расшифрованные и запустив Chrome, в настройках были найдены учетные данные от веб-сервиса.
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2012.png)
+![Untitled](images/Untitled%2012.png)
 
 ### Как произошла доставка вредоносного ПО?
 
 Подключившись по RPD злоумышленник загрузил файл Doom.exe
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2013.png)
+![Untitled](images/Untitled%2013.png)
 
 После запуска файла Doom.exe на компьютере открылся бэкдрор (njrat). После чего на компьютер загрузился файл VTropia.exe, который зашифровал файлы и удалился.
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2014.png)
+![Untitled](images/Untitled%2014.png)
 
 данный журнал активностей можно получить по пути `C:\Users\Administrator\AppData\Local\ConnectedDevicesPlatform\L.Administrator`
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2015.png)
+![Untitled](images/Untitled%2015.png)
 
 ### Какой пароль от Ransomware?
 
@@ -261,13 +261,13 @@ print(decode(Message))
 
 `Utils.AES_Encrypt()` → `4FEE20FFA3D23DEDDB909B0D49B5BBA5DA5C0738335E8615C86DE4B38B0166D4` / `B31D5E98D1BAEE97CBA4D0A0D01E1B53`
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2016.png)
+![Untitled](images/Untitled%2016.png)
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2017.png)
+![Untitled](images/Untitled%2017.png)
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2018.png)
+![Untitled](images/Untitled%2018.png)
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2019.png)
+![Untitled](images/Untitled%2019.png)
 
 ```python
 import os
@@ -400,7 +400,7 @@ for file in os.scandir("dec"):
  984 - C:\Users\<USER>\AppData\Roaming\Dropped\4.exe
 ```
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2020.png)
+![Untitled](images/Untitled%2020.png)
 
 ### Какие средства обфускации были использованы?
 
@@ -415,13 +415,13 @@ for file in os.scandir("dec"):
 - Разбиение кода на несвязные (на взгляд пользователя) методы (switch-case на 1000+ значений).
 - Преобразование управления — код не выполняется в одном месте. Указатель исполнения мигрирует по разным фрагментам одного файла, или вообще по разным файлам. Это очень сильно усложняет дебаггинг и реверс инженеринг.
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2021.png)
+![Untitled](images/Untitled%2021.png)
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2022.png)
+![Untitled](images/Untitled%2022.png)
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2023.png)
+![Untitled](images/Untitled%2023.png)
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2024.png)
+![Untitled](images/Untitled%2024.png)
 
 ---
 
@@ -435,7 +435,7 @@ for file in os.scandir("dec"):
 > **Импакт**: Можно обойти авторизацию, изменить \ удалить данные в базе данных
 > 
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2025.png)
+![Untitled](images/Untitled%2025.png)
 
 ## ✅ Prototype (Class) pollution
 
@@ -445,7 +445,7 @@ for file in os.scandir("dec"):
 > **Импакт**: можно изменить базовые атрибуты класса, что позволит контроллировать атрибуты объектов (`__class__.__base__`)
 > 
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2026.png)
+![Untitled](images/Untitled%2026.png)
 
 ## ✅ Using weak hashing algorithms
 
@@ -455,7 +455,7 @@ for file in os.scandir("dec"):
 > **Импакт**: упрощается брутфорс значений
 > 
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2027.png)
+![Untitled](images/Untitled%2027.png)
 
 ## ✅ Ordered IDs
 
@@ -465,7 +465,7 @@ for file in os.scandir("dec"):
 > **Импакт**: можно с легкостью угадать чужой бэкап
 > 
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2028.png)
+![Untitled](images/Untitled%2028.png)
 
 ## ✅ Large string→int conversion DOS attack
 
@@ -475,7 +475,7 @@ for file in os.scandir("dec"):
 > **Импакт**: при неправильной конфигурации веб-сервиса эта уязвимость вызовет падение, а при правильной - ошибки
 > 
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2029.png)
+![Untitled](images/Untitled%2029.png)
 
 ## ✅ Inappropriate security options for methods
 
@@ -485,7 +485,7 @@ for file in os.scandir("dec"):
 > **Импакт**: любой пользователь может изменять права для любого другого пользователя
 > 
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2030.png)
+![Untitled](images/Untitled%2030.png)
 
 ## ✅ Excessive hints in login errors
 
@@ -495,4 +495,4 @@ for file in os.scandir("dec"):
 > **Импакт**: злоумышленник может подобрать логин пользователя независимо от его пароля
 > 
 
-![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%2031.png)
+![Untitled](images/Untitled%2031.png)
