@@ -24,10 +24,10 @@ socket.send(JSON.stringify(encrypted({
 })));
 ```
 
-<aside>
+
 🏁 Flag: `nto{w3bs0ck3ts_plu5_xx3_1s_l0v3}`
 
-</aside>
+
 
 ## 🌐 Web-2:
 
@@ -43,10 +43,10 @@ print(r.post("http://10.10.10.10:3002/register", data={
 }).text)
 ```
 
-<aside>
-🏁 `NTO{request_smuggling_917a34072663f9c8beea3b45e8f129c5}`
 
-</aside>
+🏁 Flag: `NTO{request_smuggling_917a34072663f9c8beea3b45e8f129c5}`
+
+
 
 ## 🌐 Web-3
 
@@ -63,10 +63,10 @@ with r.Session() as s:
     print(res.text)
 ```
 
-<aside>
-🏁 `nto{pr0t0typ3_pollut10n_g4dged5_f56acc00f5eb803de88496b}`
 
-</aside>
+🏁 Flag: `nto{pr0t0typ3_pollut10n_g4dged5_f56acc00f5eb803de88496b}`
+
+
 
 ## 🔑 Crypto-1
 
@@ -88,10 +88,10 @@ for key in flag:
             print(abc[i], end="")
 ```
 
-<aside>
+
 🏁 Flag: `nto{5tr4ng3_gr0up_5tr4ng3_l0g_and_depressed_kid_zxc_ghoul}`
 
-</aside>
+
 
 ## 🔑 Crypto-2
 
@@ -118,10 +118,10 @@ for bit in range(200):
         flag += "0"
 ```
 
-<aside>
+
 🏁 Flag: `nto{0h_n0_t1m1ng}`
 
-</aside>
+
 
 ## 🔃 Reverse-1
 
@@ -134,10 +134,10 @@ for bit in range(200):
 
 ![Untitled](%D0%9E%D1%82%D1%87%D0%B5%D1%82%20NightmareFuel%20f47a329aa6784fff8839b926f7cc29af/Untitled%202.png)
 
-<aside>
-🏁 `nto{h3ll0_n3w_5ch00l_fr0m_0ld!!}`
 
-</aside>
+🏁 Flag: `nto{h3ll0_n3w_5ch00l_fr0m_0ld!!}`
+
+
 
 ---
 
